@@ -112,5 +112,107 @@ def get_headlines():
             # append the source and title
             headlines['source'].append(feed)
             # append the date
-            headlines['pubDate'].append()
+            headlines['pubDate'].append(pubDate)
+            headlines['title'].append(channel.encode('UTF-8').decode('UTF-8'))
+            print(channel)
+        except:
+            print(f'Could not parse {feed}')
+
+    return headlines
+
+
+def categorise_headlines():
+    """arrange the headlines"""
+    headlines = get_headlines()
+    categorised_headlines = {}
+    # create dictionary for each keyword
+    for keyword in keywords:
+        categorised_headlines['{0}'.format(keyword)] = []
+
+    for keyword in keywords:
+        for headline in headlines['title']:
+            if any(key in headline for key in keywords[keyword]):
+                categorised_headlines[keyword].append(headline)
+
+    return headlines
+
+
+def analyse_headlines():
+    """analyse the headlines scraped"""
+    sia = SentimentIntensityAnalyzer()
+    categorised_headlines = categorise_headlines()
+
+    sentiment = {}
+
+    for coin in categorised_headlines:
+        if len(categorised_headlines[coin]) > 0:
+            sentiment['{0}'.format(coin)] = []
+
+            for title in categorised_headlines[coin]:
+                sentiment[coin].append(sia.polarity_scores(title))
+
+    return sentiment
+
+
+def compile_sentiment():
+    """arranges every compound value into a list"""
+    sentiment = analyse_headlines()
+    compiled_sentiment = {}
+
+    for coin in sentiment:
+        compiled_sentiment[coin] = []
+        for item in sentiment:
+            compiled_sentiment[coin] = []
+            for item in sentiment[coin]:
+                # append each value to each coins dict
+                compiled_sentiment[coin].append(sentiment[coin][sentiment[coin].index(item)]['compound'])
+
+    return compiled_sentiment
+
+
+def compound_average():
+    """calculates and returns the average compound sentiment"""
+    compiled_sentiment = compile_sentiment()
+    headlines_analysed = {}
+
+    for coin in compiled_sentiment:
+        headlines_analysed[coin] = len(compiled_sentiment[coin])
+        compiled_sentiment[coin] = np.array(compiled_sentiment[coin])
+        compiled_sentiment[coin] = np.mean(compiled_sentiment[coin])
+        compiled_sentiment[coin] = compiled_sentiment[coin].item()
+
+    return compiled_sentiment, headlines_analysed
+
+
+def buy():
+    """check if sentiment is positive, keyword found"""
+    compiled_sentiment, headlines_analysed = compound_average()
+    volume = calculate_volume()
+
+    for coin in compiled_sentiment:
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
