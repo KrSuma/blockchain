@@ -6,10 +6,10 @@ import http.client
 sentiment_key = '1eb20bbf70msh12e87c73d706fcdp12edb5jsn8f0ea53ec57b'
 websearch_key = '1eb20bbf70msh12e87c73d706fcdp12edb5jsn8f0ea53ec57b'
 
-crypto_key_pairs = {"BTCUSD": "Bitcoin", "ETHUSD": "Ethereum", "LTCUSD": "Litecoin", "XRPUSD": "Ripple",
-                    "BATUSD": "BATUSD, basic attention token", "DSHUSD": "Dash Coin", "EOSUSD": "EOS",
-                    "ETCUSD": "ETC", "IOTUSD": "IOTA", "NEOUSD": "NEO", "OMGUSD": "OMISE Go", "TRXUSD": "Tron",
-                    "XLMUSD": "Stellar Lumens", "XMRUSD": "Monero", "ZECUSD": "Zcash"}
+crypto_key_pairs = {"BTCUSD": "Bitcoin", "BCHUSD": 'Bitcoin Cash', "ETHUSD": "Ethereum", "LTCUSD": "Litecoin", "XRPUSD": "Ripple",
+                    "ETCUSD": "ETC", "VET":'VeChain', "XNO": 'Xeno Token', "STEEM": 'Steem',
+                    "XLMUSD": "Stellar Lumens", "XMRUSD": "Monero", "STCUSD": "Student Coin",
+                    "LUNA": 'Luna', "ANC": 'Anchor Protocol', "MIR": 'Mirror Protocol'}
 
 date_since = date.today() - timedelta(days=1)
 
@@ -63,7 +63,7 @@ def analyze_headlines():
 
     for crypto in crypto_keywords:
         # empty list to store sentient value
-        news_output[crypto]['sentient'] = {'pos': [], 'mid': [], 'neg': []}
+        news_output[crypto]['sentiment'] = {'pos': [], 'mid': [], 'neg': []}
         # analyze descriptions
         if len(news_output[crypto]['description']) > 0:
             for title in news_output[crypto]['title']:
@@ -122,3 +122,4 @@ if __name__ == '__main__':
         calc_sentiment()
         print(f'Iteration {i}')
         time.sleep(900)
+
